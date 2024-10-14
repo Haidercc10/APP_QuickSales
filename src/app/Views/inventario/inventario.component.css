@@ -1,0 +1,7 @@
+::ng-deep .p-component {
+  font-size: 0.9rem;
+}
+
+::ng-deep .p-dialog .p-dialog-header {
+  color: #dc3545;
+}

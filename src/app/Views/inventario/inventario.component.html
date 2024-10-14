@@ -1,0 +1,57 @@
+<div class="contain">
+  <!-- Navegador fin de parte superior -->
+  <div class="container-fluid">
+
+    <!-- principal -->
+    <div class="mb-4 text-center">
+      <h2 id="" class="text-danger">Inventario de Productos</h2>
+    </div>
+
+    <p-divider></p-divider>
+  </div>
+</div>
+
+<p-card>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
+    <button (click)="modal = true" type="button" class="btn btn-danger mr-2"><i class="pi pi-plus"></i> <b> Crear Producto</b></button>
+  </div>
+
+  <div class="mb-3">
+    <h5 class="text-danger"><i class="pi pi-box text-danger"></i> Productos</h5>
+  </div>
+
+  <p-table [value]="products">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Cantidad</th>
+            <th>Unidad</th>
+            <th>Precio</th>
+            <th>Subtotal</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+        <tr>
+            <td>{{''}}</td>
+            <td>{{''}}</td>
+            <td>{{''}}</td>
+            <td>{{''}}</td>
+            <td>{{0}}</td>
+            <td>{{0}}</td>
+            <td>{{0}}</td>
+            <td>{{0}}</td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+        <div class="flex align-items-center justify-content-between">
+            En total hay {{products ? products.length : 0 }} productos.
+        </div>
+    </ng-template>
+</p-table>
+
+</p-card>
+
+<p-dialog header="Formulario" [(visible)]="modal" [style]="{width: '35vw'}"></p-dialog>
