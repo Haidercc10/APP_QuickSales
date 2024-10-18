@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Model_Products } from 'src/app/Models/Products/Model_Products';
 import { SvMsgsService } from 'src/app/Services/Mensajes/sv-msgs.service';
 import { ProductosService } from 'src/app/Services/Productos/productos.service';
 
@@ -15,12 +16,25 @@ export class InventarioComponent implements OnInit {
   form !: FormGroup;
 
   constructor(private svProductos : ProductosService,
-    private svMsjs : SvMsgsService
+    private svMsjs : SvMsgsService,
+    private frmBuilder : FormBuilder
   ){
+    this.initForm();
   }
 
   ngOnInit() {
     this.getProducts();
+  }
+
+  initForm(){
+    this.form = this.frmBuilder.group({
+      id : [null, Validators.required],
+      name : [null, Validators.required],
+      description : [null, Validators.required],
+      medition : [null, Validators.required],
+      price : [null, Validators.required],
+      unit : [null, Validators.required],
+    })
   }
 
   getProducts(){
@@ -33,6 +47,22 @@ export class InventarioComponent implements OnInit {
   }
 
   CreateProducts(){
+    if(this.form.valid) {
+      let info : Model_Products = {
+        Prod_Id : 0,
+        Prod_Nombre: this.form.value.name,
+        Prod_Descripcion: this.form.value.description,
+        Prod_Medida: this.form.value.medition,
+        Prod_Precio: this.form.value.price,
+        Und_Id: this.form.value.price
+      }
+
+      this.svProductos.post_producto(info).then(data => {
+        this.svMsjs.msgExit(`Excelente!`, `${data}!`);
+      }, error => {
+        this.svMsjs.msgError(`Error`, `No fue posible crear el producto | ${error.status} ${error.statusText}`);
+      });
+    }
   }
 
   updateProducts(){}

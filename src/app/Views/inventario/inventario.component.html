@@ -58,4 +58,26 @@
 
 </p-card>
 
-<p-dialog header="Formulario" [(visible)]="modal" [style]="{width: '35vw'}"></p-dialog>
+<p-dialog header="Formulario" [(visible)]="modal" [style]="{width: '35vw'}">
+  <form [formGroup]="form">
+    <div class="mb-3">
+      <label for="id" class="form-label">Id Producto</label>
+      <input formControlName="id" type="number" class="form-control" id="id" aria-describedby="emailHelp">
+    </div>
+    <div class="mb-3">
+      <label for="name" class="form-label">Nombre</label>
+      <input formControlName="name" type="text" class="form-control" id="name">
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Descripción</label>
+      <input formControlName="description" type="text" class="form-control" id="description">
+    </div>
+    <div class="mb-3">
+      <label for="medition" class="form-label">Medida</label>
+      <input formControlName="medition" type="text" class="form-control" id="medition">
+    </div>
+    <div class="d-grid gap-2">
+      <button type="button" class="btn btn-danger mr-2"><i class="pi pi-check-square"></i> Crear</button>
+    </div>
+  </form>
+</p-dialog>
