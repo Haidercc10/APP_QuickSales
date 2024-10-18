@@ -1,9 +1,8 @@
 export interface Model_Products {
-  Usu_Id : number;
-  Usu_Nombre : string;
-  Usu_Email : string;
-  Usu_Telefono : number;
-  Rol_Id : number;
-  TpDoc_Id : string;
-  Usu_Password : string;
+  Prod_Id? : number;
+  Prod_Nombre : string;
+  Prod_Descripcion : string;
+  Prod_Medida : string;
+  Prod_Precio : number;
+  Und_Id : string;
 }

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { SvMsgsService } from 'src/app/Services/Mensajes/sv-msgs.service';
+import { ProductosService } from 'src/app/Services/Productos/productos.service';
 
 @Component({
   selector: 'app-inventario',
@@ -9,14 +12,28 @@ export class InventarioComponent implements OnInit {
 
   products : any = [];
   modal : boolean = false;
+  form !: FormGroup;
 
-  ngOnInit() {
-
+  constructor(private svProductos : ProductosService,
+    private svMsjs : SvMsgsService
+  ){
   }
 
-  getProducts(){}
+  ngOnInit() {
+    this.getProducts();
+  }
 
-  CreateProducts(){}
+  getProducts(){
+    this.products = [];
+    this.svProductos.get_productos().then(data => {
+      this.products = data.data;
+    }, error => {
+      this.svMsjs.msgError(`Error`, `No fue posible cargar la lista de productos | ${error.status} ${error.statusText}`);
+    });
+  }
+
+  CreateProducts(){
+  }
 
   updateProducts(){}
 

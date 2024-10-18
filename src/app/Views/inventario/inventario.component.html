@@ -4,7 +4,7 @@
 
     <!-- principal -->
     <div class="mb-4 text-center">
-      <h2 id="" class="text-danger">Inventario de Productos</h2>
+      <h2 id="" class="text-danger">Gestión de Productos</h2>
     </div>
 
     <p-divider></p-divider>
@@ -20,7 +20,7 @@
     <h5 class="text-danger"><i class="pi pi-box text-danger"></i> Productos</h5>
   </div>
 
-  <p-table [value]="products">
+  <p-table [value]="products" [rowHover]="true">
     <ng-template pTemplate="header">
         <tr>
             <th>Id</th>
@@ -33,16 +33,20 @@
             <th>Eliminar</th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-product>
+    <ng-template pTemplate="body" let-data>
         <tr>
-            <td>{{''}}</td>
-            <td>{{''}}</td>
-            <td>{{''}}</td>
-            <td>{{''}}</td>
+            <td>{{data.Prod_Id}}</td>
+            <td>{{data.Prod_Nombre}}</td>
             <td>{{0}}</td>
-            <td>{{0}}</td>
-            <td>{{0}}</td>
-            <td>{{0}}</td>
+            <td>{{data.Und_Id}}</td>
+            <td>{{data.Prod_Precio | number : '1.2-2'}}</td>
+            <td>{{data.Prod_Precio * 0}}</td>
+            <td>
+              <button (click)="modal = true" type="button" class="btn btn-success mr-2"><i class="pi pi-refresh"></i></button>
+            </td>
+            <td>
+              <button (click)="modal = true" type="button" class="btn btn-danger mr-2"><i class="pi pi-trash"></i></button>
+            </td>
         </tr>
     </ng-template>
     <ng-template pTemplate="summary">
