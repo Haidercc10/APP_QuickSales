@@ -8,7 +8,7 @@ import axios from 'axios';
 })
 export class SvUsuariosService {
 
-  readonly apiUrl = `http://127.0.0.1:8000/usuario`;
+  readonly apiUrl = `http://127.0.0.1:8000/usuarios`;
 
   constructor() { }
 

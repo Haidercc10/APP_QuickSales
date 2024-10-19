@@ -30,12 +30,13 @@ export class LoginComponent implements OnInit {
 
   sendData(){
     this.svUsers.get_usuario(this.form.value.id).then(data => {
+      console.log(data.data.Usu_Password, this.form.value.pass);
       if(data.data.Usu_Password == this.form.value.pass) {
         this.svMsj.msgExit(`Datos correctos`, `Bienvenido a Quick Sales ${data.data.Usu_Nombre}!`);
         window.location.pathname = '/home';
       }
     }, error => {
-      this.svMsj.msgError(`Datos incorrectos`, `No fue posible su acceso a Quick Sales | ${error.status} ${error.statusText}`);
+      this.svMsj.msgError(`Datos incorrectos`, `No fue posible su acceso a Quick Sales | ${error.status} ${error.detail}`);
     });
   }
 }

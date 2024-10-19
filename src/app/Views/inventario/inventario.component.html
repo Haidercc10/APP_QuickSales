@@ -1,51 +1,72 @@
+<!--* Navbar-->
+<app-header></app-header>
+
+<!--*Title module-->
 <div class="contain">
-  <!-- Navegador fin de parte superior -->
   <div class="container-fluid">
-
-    <!-- principal -->
     <div class="mb-4 text-center">
-      <h2 id="" class="text-danger">Gestión de Productos</h2>
+      <p-chip><h2 id="" class="text-danger"> <b> Gestión de Productos</b></h2></p-chip>
     </div>
-
     <p-divider></p-divider>
   </div>
 </div>
 
+<!--* Card-->
 <p-card>
-  <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
-    <button (click)="loadModal(true)" type="button" class="btn btn-danger mr-2"><i class="pi pi-plus"></i> <b> Crear Producto</b></button>
-  </div>
 
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
+    <button (click)="loadModal(true)" type="button" class="btn btn-danger mr-2"><i class="pi pi-plus"></i> <b> Crear</b></button>
+  </div>
+  <!--* Title Card-->
   <div class="mb-3">
     <h5 class="text-danger"><i class="pi pi-box text-danger"></i> Productos</h5>
   </div>
-
-  <p-table [value]="products" [rowHover]="true">
+  <!--* Table -->
+  <p-table
+  #dt
+  [value]="products"
+  [rowHover]="true"
+  [resizableColumns]="true"
+  columnResizeMode="expand"
+  styleClass="p-datatable-sm"
+  responsiveLayout="scroll"
+  [rowHover]="true"
+  [scrollable]="true"
+  scrollHeight="50rem">
     <ng-template pTemplate="header">
         <tr>
-            <th>Id</th>
-            <th>Nombre</th>
-            <th>Cantidad</th>
-            <th>Unidad</th>
-            <th>Precio</th>
-            <th>Subtotal</th>
-            <th>Editar</th>
-            <th>Eliminar</th>
+          <th><input (input)="applyFilter($event, 'Prod_Id')" pInputText type="number" style="width: 100%;"></th>
+          <th><input (input)="applyFilter($event, 'Prod_Nombre')" pInputText type="text" style="width: 100%;"></th>
+          <th><input (input)="applyFilter($event, '')" pInputText type="number" style="width: 100%;"></th>
+          <th><input (input)="applyFilter($event, 'Und_Id')" pInputText type="text" style="width: 100%;"></th>
+          <th><input (input)="applyFilter($event, 'Prod_Precio')" pInputText type="number" style="width: 100%;"></th>
+          <th><input (input)="applyFilter($event, 'Prod_Precio')" pInputText type="number" style="width: 100%;"></th>
+          <th colspan="2"></th>
+        </tr>
+        <tr>
+            <th pSortableColumn="Prod_Id" class="text-center"><p-sortIcon field="Prod_Id"></p-sortIcon> Id</th>
+            <th pSortableColumn="Prod_Nombre" class="text-center"><p-sortIcon field="Prod_Nombre"></p-sortIcon> Nombre</th>
+            <th pSortableColumn="" class="text-center"><p-sortIcon field=""></p-sortIcon> Cantidad</th>
+            <th pSortableColumn="Und_Id" class="text-center"><p-sortIcon field="Und_Id"></p-sortIcon> Unidad</th>
+            <th pSortableColumn="Prod_Precio" class="text-center"><p-sortIcon field="Prod_Precio"></p-sortIcon> Precio</th>
+            <th pSortableColumn="" class="text-center"><p-sortIcon field=""></p-sortIcon> Subtotal</th>
+            <th class="text-center">Editar</th>
+            <th class="text-center">Eliminar</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-data>
         <tr>
-            <td>{{data.Prod_Id}}</td>
+            <td class="text-center">{{data.Prod_Id}}</td>
             <td>{{data.Prod_Nombre}}</td>
-            <td>{{0}}</td>
-            <td>{{data.Und_Id}}</td>
-            <td>{{data.Prod_Precio | number : '1.2-2'}}</td>
-            <td>{{data.Prod_Precio * 0}}</td>
+            <td class="text-center">{{0}}</td>
+            <td class="text-center">{{data.Und_Id}}</td>
+            <td class="text-center">$ {{data.Prod_Precio | number : '1.2-2'}}</td>
+            <td class="text-center">$ {{data.Prod_Precio * 0}}</td>
             <td>
               <button (click)="loadModal(false, data)" type="button" class="btn btn-success mr-2"><i class="pi pi-refresh"></i></button>
             </td>
-            <td>
-              <button (click)="modal = true" type="button" class="btn btn-danger mr-2"><i class="pi pi-trash"></i></button>
+            <td class="text-center">
+              <button (click)="deleteProducts(data)" type="button" class="btn btn-danger mr-2"><i class="pi pi-trash"></i></button>
             </td>
         </tr>
     </ng-template>
@@ -58,7 +79,8 @@
 
 </p-card>
 
-<p-dialog header="Formulario" [(visible)]="modal" [style]="{width: '30vw'}">
+<!--* Modal-->
+<p-dialog header="Formulario" [(visible)]="modal" [modal]="true" [style]="{width: '30vw'}">
   <form [formGroup]="form">
     <div class="mb-3">
       <label for="id" class="form-label">Id Producto</label>
@@ -88,5 +110,10 @@
     </div>
   </form>
 </p-dialog>
+
+<p-dialog id="modal-1" [(visible)]="load" [modal]="true">
+  <p-progressSpinner></p-progressSpinner>
+</p-dialog>
+
 
 <p-toast position="center" [preventOpenDuplicates]="true" [breakpoints]="{'920px': {width: '100%', right: '0', left: '0'}}"></p-toast>

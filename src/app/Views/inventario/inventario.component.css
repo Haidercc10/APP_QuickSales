@@ -10,3 +10,9 @@ p-dropdown ::ng-deep .p-dropdown, p-inputnumber, p-inputnumber ::ng-deep span, p
   display: flex;
   width: 100%;
 }
+
+::ng-deep .p-chip {
+  background-color: white;
+  border-radius: 16px;
+  padding: 0 0.75rem;
+}

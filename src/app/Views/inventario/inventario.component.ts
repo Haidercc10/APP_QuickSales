@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Table } from 'primeng/table';
 import { Model_Products } from 'src/app/Models/Products/Model_Products';
 import { SvMsgsService } from 'src/app/Services/Mensajes/sv-msgs.service';
 import { ProductosService } from 'src/app/Services/Productos/productos.service';
@@ -18,6 +19,9 @@ export class InventarioComponent implements OnInit {
   actionButton : string = `Crear`;
   classButton : string = `btn-danger`;
   iconButton : string = `pi-check-square`;
+  load : boolean = false;
+  @ViewChild('dt') dt !: Table;
+
 
   constructor(private svProductos : ProductosService,
     private svMsjs : SvMsgsService,
@@ -26,10 +30,12 @@ export class InventarioComponent implements OnInit {
     this.initForm();
   }
 
+  //* Función que ejecuta metodosapenas se carga un modulo.
   ngOnInit() {
     this.getProducts();
   }
 
+  //*Inicializar formulario
   initForm(){
     this.form = this.frmBuilder.group({
       id : [null],
@@ -41,15 +47,16 @@ export class InventarioComponent implements OnInit {
     })
   }
 
-  getProducts(){
-    this.products = [];
-    this.svProductos.get_productos().then(data => {
-      this.products = data.data;
-    }, error => {
-      this.svMsjs.msgError(`Error`, `No fue posible cargar la lista de productos | ${error.status} ${error.statusText}`);
-    });
+  //* Función para limpiar campos
+  clearFields(){
+    this.form.reset();
+    this.modal = false;
   }
 
+  applyFilter = ($event : any, campo: any) => this.dt!.filter(($event.target as HTMLInputElement).value, campo, 'contains');
+
+
+  //*Función que retorna el modelo de productos
   dataProducts(){
     let info : Model_Products = {
       Prod_Id : 0,
@@ -62,10 +69,44 @@ export class InventarioComponent implements OnInit {
     return info;
   }
 
+  //*Función para realizar la acción de actualizar o crear productos
   actionsModal(action : string){
     action == `Crear` ? this.CreateProducts() : this.updateProducts();
   }
 
+  //*Función para cargar el modal y cambiar clases dependiendo la acción
+  loadModal(create : boolean, data? : any){
+    this.form.reset();
+    this.modal = true;
+    this.actionButton = create ? `Crear` : `Actualizar`;
+    this.classButton = create ? `btn-danger` : `btn-success`
+    this.iconButton = create ? `pi-check-square` : `pi-refresh`
+    if (!create) setTimeout(() => { this.loadFieldsToUpdate(data); }, 200);
+  }
+
+  //* Función para cargar los campos del producto a actualizar en el modal
+  loadFieldsToUpdate(data : any){
+    this.form.patchValue({
+      'id' : data.Prod_Id,
+      'name' : data.Prod_Nombre,
+      'description' : data.Prod_Descripcion,
+      'medition' : data.Prod_Medida,
+      'price' : data.Prod_Precio,
+      'unit' : data.Und_Id,
+    });
+  }
+
+  //*Función para obtener todos los productos
+  getProducts(){
+    this.products = [];
+    this.svProductos.get_productos().then(data => {
+      this.products = data.data;
+    }, error => {
+      this.svMsjs.msgError(`Error`, `No fue posible cargar la lista de productos | ${error.status} ${error.statusText}`);
+    });
+  }
+
+  //*Función para crear productos
   CreateProducts(){
     if(this.form.valid) {
       this.svProductos.post_producto(this.dataProducts()).then(data => {
@@ -78,10 +119,7 @@ export class InventarioComponent implements OnInit {
     } else this.svMsjs.msgAdv(`Error`, `Debe llenar todos los campos!`);
   }
 
-  clearFields(){
-    this.form.reset();
-  }
-
+  //*Función para actualizar productos
   updateProducts(){
     if(this.form.valid) {
       this.svProductos.put_producto(this.form.value.id, this.dataProducts()).then(data => {
@@ -94,27 +132,16 @@ export class InventarioComponent implements OnInit {
     } else this.svMsjs.msgAdv(`Error`, `Debe llenar todos los campos!`);
   }
 
-  deleteProducts(){}
-
-  loadModal(create : boolean, data? : any){
-    this.modal = true;
-    this.actionButton = create ? `Crear` : `Actualizar`;
-    this.classButton = create ? `btn-danger` : `btn-success`
-    this.iconButton = create ? `pi-check-square` : `pi-refresh`
-    if (!create) setTimeout(() => { this.loadFieldsToUpdate(data); }, 200);
-  }
-
-  loadFieldsToUpdate(data : any){
-    console.log(data.data);
-    this.form.patchValue({
-      'id' : data.Prod_Id,
-      'name' : data.Prod_Nombre,
-      'description' : data.Prod_Descripcion,
-      'medition' : data.Prod_Medida,
-      'price' : data.Prod_Precio,
-      'unit' : data.Und_Id,
+  //*Función para eliminar productos
+  deleteProducts(data : any){
+    this.svProductos.delete_producto(data.Prod_Id).then(data => {
+      this.svMsjs.msgExit(`Excelente!`, `${data.data.message}!`);
+      this.getProducts();
+    }, error => {
+      this.svMsjs.msgError(`Error`, `${data.data.message}!`);
     })
   }
+
 }
 
 

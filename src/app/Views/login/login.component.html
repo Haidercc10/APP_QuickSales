@@ -1,21 +1,25 @@
-<div class="content">
-  <form [formGroup]="form">
-    <div class="mb-3">
-      <h4 class="text-center text-danger">Iniciar Sesión</h4>
+<div cass="container-fluid">
+  <div class="bg-red">
+    <div class="content">
+      <form [formGroup]="form">
+        <div class="mb-3">
+          <h4 class="text-center text-danger"> <b> Iniciar Sesión</b></h4>
+        </div>
+          <div class="mb-3">
+          <label for="id" class="form-label">Id Usuario</label>
+          <input formControlName="id" type="number" class="form-control" id="id" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+          <label for="pass" class="form-label">Password</label>
+          <input formControlName="pass" type="password" class="form-control" id="pass">
+        </div>
+        <div id="note" class="form-text text-center mb-3">Disfruta de todos los beneficios de <b>Quick Sales <i class="pi pi-cart-plus"></i></b></div>
+        <div class="d-grid gap-2">
+          <button (click)="sendData()" type="button" class="btn btn-danger mr-2"><i class="pi pi-check-square"></i> <b> Ingresar</b> </button>
+        </div>
+      </form>
     </div>
-      <div class="mb-3">
-      <label for="id" class="form-label">Id Usuario</label>
-      <input formControlName="id" type="number" class="form-control" id="id" aria-describedby="emailHelp">
-    </div>
-    <div class="mb-3">
-      <label for="pass" class="form-label">Password</label>
-      <input formControlName="pass" type="password" class="form-control" id="pass">
-    </div>
-    <div id="note" class="form-text text-center mb-3">Disfruta de todos los beneficios de <b>Quick Sales <i class="pi pi-cart-plus"></i></b></div>
-    <div class="d-grid gap-2">
-      <button (click)="sendData()" type="button" class="btn btn-danger mr-2"><i class="pi pi-check-square"></i> Ingresar</button>
-    </div>
-  </form>
+  </div>
 </div>
 
 <p-toast position="center" [preventOpenDuplicates]="true" [breakpoints]="{'920px': {width: '100%', right: '0', left: '0'}}"></p-toast>
