@@ -14,6 +14,10 @@ export class InventarioComponent implements OnInit {
   products : any = [];
   modal : boolean = false;
   form !: FormGroup;
+  units : any = [{ Und_Id : 'UND' }];
+  actionButton : string = `Crear`;
+  classButton : string = `btn-danger`;
+  iconButton : string = `pi-check-square`;
 
   constructor(private svProductos : ProductosService,
     private svMsjs : SvMsgsService,
@@ -28,7 +32,7 @@ export class InventarioComponent implements OnInit {
 
   initForm(){
     this.form = this.frmBuilder.group({
-      id : [null, Validators.required],
+      id : [null],
       name : [null, Validators.required],
       description : [null, Validators.required],
       medition : [null, Validators.required],
@@ -46,28 +50,71 @@ export class InventarioComponent implements OnInit {
     });
   }
 
+  dataProducts(){
+    let info : Model_Products = {
+      Prod_Id : 0,
+      Prod_Nombre: this.form.value.name,
+      Prod_Descripcion: this.form.value.description,
+      Prod_Medida: this.form.value.medition,
+      Prod_Precio: this.form.value.price,
+      Und_Id: this.form.value.unit
+    }
+    return info;
+  }
+
+  actionsModal(action : string){
+    action == `Crear` ? this.CreateProducts() : this.updateProducts();
+  }
+
   CreateProducts(){
     if(this.form.valid) {
-      let info : Model_Products = {
-        Prod_Id : 0,
-        Prod_Nombre: this.form.value.name,
-        Prod_Descripcion: this.form.value.description,
-        Prod_Medida: this.form.value.medition,
-        Prod_Precio: this.form.value.price,
-        Und_Id: this.form.value.price
-      }
-
-      this.svProductos.post_producto(info).then(data => {
-        this.svMsjs.msgExit(`Excelente!`, `${data}!`);
+      this.svProductos.post_producto(this.dataProducts()).then(data => {
+        this.svMsjs.msgExit(`Excelente!`, `${data.data.message}!`);
+        this.clearFields();
+        this.getProducts();
       }, error => {
         this.svMsjs.msgError(`Error`, `No fue posible crear el producto | ${error.status} ${error.statusText}`);
       });
-    }
+    } else this.svMsjs.msgAdv(`Error`, `Debe llenar todos los campos!`);
   }
 
-  updateProducts(){}
+  clearFields(){
+    this.form.reset();
+  }
+
+  updateProducts(){
+    if(this.form.valid) {
+      this.svProductos.put_producto(this.form.value.id, this.dataProducts()).then(data => {
+        this.svMsjs.msgExit(`Excelente!`, `${data.data.message}!`);
+        this.clearFields();
+        this.getProducts();
+      }, error => {
+        this.svMsjs.msgError(`Error`, `No fue posible actualizar el producto | ${error.status} ${error.statusText}`);
+      });
+    } else this.svMsjs.msgAdv(`Error`, `Debe llenar todos los campos!`);
+  }
 
   deleteProducts(){}
+
+  loadModal(create : boolean, data? : any){
+    this.modal = true;
+    this.actionButton = create ? `Crear` : `Actualizar`;
+    this.classButton = create ? `btn-danger` : `btn-success`
+    this.iconButton = create ? `pi-check-square` : `pi-refresh`
+    if (!create) setTimeout(() => { this.loadFieldsToUpdate(data); }, 200);
+  }
+
+  loadFieldsToUpdate(data : any){
+    console.log(data.data);
+    this.form.patchValue({
+      'id' : data.Prod_Id,
+      'name' : data.Prod_Nombre,
+      'description' : data.Prod_Descripcion,
+      'medition' : data.Prod_Medida,
+      'price' : data.Prod_Precio,
+      'unit' : data.Und_Id,
+    })
+  }
 }
 
 

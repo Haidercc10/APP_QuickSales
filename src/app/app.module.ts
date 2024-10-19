@@ -17,6 +17,8 @@ import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { DropdownModule } from 'primeng/dropdown';
 
 const routes : Routes = [
   { path : '', component : LoginComponent,   },
@@ -47,6 +49,8 @@ const routes : Routes = [
     DividerModule,
     TableModule,
     DialogModule,
+    InputNumberModule,
+    DropdownModule
   ],
   exports : [RouterModule],
   providers: [

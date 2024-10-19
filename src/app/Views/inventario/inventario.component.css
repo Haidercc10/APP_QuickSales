@@ -5,3 +5,8 @@
 ::ng-deep .p-dialog .p-dialog-header {
   color: #dc3545;
 }
+
+p-dropdown ::ng-deep .p-dropdown, p-inputnumber, p-inputnumber ::ng-deep span, p-inputnumber ::ng-deep input, p-calendar, p-calendar ::ng-deep span {
+  display: flex;
+  width: 100%;
+}

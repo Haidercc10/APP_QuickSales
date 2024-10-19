@@ -13,7 +13,7 @@
 
 <p-card>
   <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
-    <button (click)="modal = true" type="button" class="btn btn-danger mr-2"><i class="pi pi-plus"></i> <b> Crear Producto</b></button>
+    <button (click)="loadModal(true)" type="button" class="btn btn-danger mr-2"><i class="pi pi-plus"></i> <b> Crear Producto</b></button>
   </div>
 
   <div class="mb-3">
@@ -42,7 +42,7 @@
             <td>{{data.Prod_Precio | number : '1.2-2'}}</td>
             <td>{{data.Prod_Precio * 0}}</td>
             <td>
-              <button (click)="modal = true" type="button" class="btn btn-success mr-2"><i class="pi pi-refresh"></i></button>
+              <button (click)="loadModal(false, data)" type="button" class="btn btn-success mr-2"><i class="pi pi-refresh"></i></button>
             </td>
             <td>
               <button (click)="modal = true" type="button" class="btn btn-danger mr-2"><i class="pi pi-trash"></i></button>
@@ -58,11 +58,11 @@
 
 </p-card>
 
-<p-dialog header="Formulario" [(visible)]="modal" [style]="{width: '35vw'}">
+<p-dialog header="Formulario" [(visible)]="modal" [style]="{width: '30vw'}">
   <form [formGroup]="form">
     <div class="mb-3">
       <label for="id" class="form-label">Id Producto</label>
-      <input formControlName="id" type="number" class="form-control" id="id" aria-describedby="emailHelp">
+      <input formControlName="id" type="number" [readOnly]="true" class="form-control" id="id">
     </div>
     <div class="mb-3">
       <label for="name" class="form-label">Nombre</label>
@@ -76,8 +76,17 @@
       <label for="medition" class="form-label">Medida</label>
       <input formControlName="medition" type="text" class="form-control" id="medition">
     </div>
+    <div class="mb-3">
+      <label for="price" class="form-label">Precio</label>
+      <input formControlName="price" type="number" class="form-control" id="price">
+    </div>
+    <div class="mb-3">
+      <p-dropdown formControlName="unit" [options]="units" optionLabel="Und_Id" optionValue="Und_Id" [autoDisplayFirst]="true"></p-dropdown>
+    </div>
     <div class="d-grid gap-2">
-      <button type="button" class="btn btn-danger mr-2"><i class="pi pi-check-square"></i> Crear</button>
+      <button (click)="actionsModal(actionButton)" type="button"  class="btn {{classButton}} mr-2"><i class="pi {{iconButton}}"></i> {{actionButton}}</button>
     </div>
   </form>
 </p-dialog>
+
+<p-toast position="center" [preventOpenDuplicates]="true" [breakpoints]="{'920px': {width: '100%', right: '0', left: '0'}}"></p-toast>
