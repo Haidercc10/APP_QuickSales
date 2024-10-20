@@ -40,7 +40,7 @@
           <th><input (input)="applyFilter($event, '')" pInputText type="number" style="width: 100%;"></th>
           <th><input (input)="applyFilter($event, 'Und_Id')" pInputText type="text" style="width: 100%;"></th>
           <th><input (input)="applyFilter($event, 'Prod_Precio')" pInputText type="number" style="width: 100%;"></th>
-          <th><input (input)="applyFilter($event, 'Prod_Precio')" pInputText type="number" style="width: 100%;"></th>
+          <th><input (input)="applyFilter($event, '')" pInputText type="number" style="width: 100%;"></th>
           <th colspan="2"></th>
         </tr>
         <tr>
@@ -114,6 +114,5 @@
 <p-dialog id="modal-1" [(visible)]="load" [modal]="true">
   <p-progressSpinner></p-progressSpinner>
 </p-dialog>
-
 
 <p-toast position="center" [preventOpenDuplicates]="true" [breakpoints]="{'920px': {width: '100%', right: '0', left: '0'}}"></p-toast>

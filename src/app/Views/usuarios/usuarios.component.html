@@ -1,2 +1,119 @@
+<!--* Navbar-->
 <app-header></app-header>
-<p>usuarios works!</p>
+
+<!--*Title module-->
+<div class="contain">
+  <div class="container-fluid">
+    <div class="mb-4 text-center">
+      <p-chip><h2 id="" class="text-danger"> <b> Gestión de Usuarios</b></h2></p-chip>
+    </div>
+    <p-divider></p-divider>
+  </div>
+</div>
+
+<!--* Card-->
+<p-card>
+
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
+    <button (click)="loadModal(true)" type="button" class="btn btn-danger mr-2"><i class="pi pi-plus"></i> <b> Crear</b></button>
+  </div>
+  <!--* Title Card-->
+  <div class="mb-3">
+    <h5 class="text-danger"><i class="pi pi-users text-danger"></i> Usuarios</h5>
+  </div>
+  <!--* Table -->
+  <p-table
+  #dt
+  [value]="users"
+  [rowHover]="true"
+  [resizableColumns]="true"
+  columnResizeMode="expand"
+  styleClass="p-datatable-sm"
+  responsiveLayout="scroll"
+  [rowHover]="true"
+  [scrollable]="true"
+  scrollHeight="50rem">
+    <ng-template pTemplate="header">
+        <tr>
+          <th><input (input)="applyFilter($event, 'Usu_Id')" pInputText type="number" style="width: 100%;"></th>
+          <th><input (input)="applyFilter($event, 'Usu_Nombre')" pInputText type="text" style="width: 100%;"></th>
+          <th><input (input)="applyFilter($event, 'TpDoc_Id')" pInputText type="number" style="width: 100%;"></th>
+          <th><input (input)="applyFilter($event, 'Usu_Email')" pInputText type="text" style="width: 100%;"></th>
+          <th><input (input)="applyFilter($event, 'Usu_Telefono')" pInputText type="number" style="width: 100%;"></th>
+          <th><input (input)="applyFilter($event, 'Rol_Id')" pInputText type="number" style="width: 100%;"></th>
+          <th colspan="2"></th>
+        </tr>
+        <tr>
+            <th pSortableColumn="Usu_Id" class="text-center"><p-sortIcon field="Usu_Id"></p-sortIcon> Id</th>
+            <th pSortableColumn="Usu_Nombre" class="text-center"><p-sortIcon field="Usu_Nombre"></p-sortIcon> Nombre</th>
+            <th pSortableColumn="TpDoc_Id" class="text-center"><p-sortIcon field="TpDoc_Id"></p-sortIcon> Tipo Doc.</th>
+            <th pSortableColumn="Usu_Email" class="text-center"><p-sortIcon field="Usu_Email"></p-sortIcon> Email</th>
+            <th pSortableColumn="Usu_Telefono" class="text-center"><p-sortIcon field="Usu_Telefono"></p-sortIcon> Teléfono</th>
+            <th pSortableColumn="Rol_Id" class="text-center"><p-sortIcon field="Rol_Id"></p-sortIcon> Rol</th>
+            <th class="text-center">Editar</th>
+            <th class="text-center">Eliminar</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-data>
+        <tr>
+            <td class="text-center">{{data.Usu_Id}}</td>
+            <td>{{data.Usu_Nombre}}</td>
+            <td class="text-center">{{data.TpDoc_Id }}</td>
+            <td class="text-center">{{data.Usu_Email}}</td>
+            <td class="text-center">{{data.Usu_Telefono}}</td>
+            <td class="text-center">{{data.Rol_Nombre}}</td>
+            <td>
+              <button (click)="loadModal(false, data)" type="button" class="btn btn-success mr-2"><i class="pi pi-refresh"></i></button>
+            </td>
+            <td class="text-center">
+              <button (click)="deleteUsers(data)" type="button" class="btn btn-danger mr-2"><i class="pi pi-trash"></i></button>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+        <div class="flex align-items-center justify-content-between">
+            En total hay {{users ? users.length : 0 }} usuarios.
+        </div>
+    </ng-template>
+</p-table>
+
+</p-card>
+
+<!--* Modal-->
+<p-dialog header="Formulario" [(visible)]="modal" [modal]="true" [style]="{width: '30vw'}">
+  <form [formGroup]="form">
+    <div class="mb-3">
+      <label for="id" class="form-label">Id Usuario</label>
+      <input formControlName="id" type="number" class="form-control" id="id">
+    </div>
+    <div class="mb-3">
+      <label for="name" class="form-label">Nombre</label>
+      <input formControlName="name" type="text" class="form-control" id="name">
+    </div>
+    <div class="mb-3">
+      <label for="typeDoc" class="form-label">Tipo Id.</label>
+      <input formControlName="typeDoc" type="text" [readOnly]="true" class="form-control" id="typeDoc">
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input formControlName="email" type="text" class="form-control" id="email">
+    </div>
+    <div class="mb-3">
+      <label for="phone" class="form-label">Teléfono</label>
+      <input formControlName="phone" type="number" class="form-control" id="phone">
+    </div>
+    <div class="mb-3">
+      <label for="rol" class="form-label">Rol</label>
+      <p-dropdown formControlName="rol" [options]="rols" optionLabel="Rol_Nombre" optionValue="Rol_Id" [autoDisplayFirst]="true" id="rol"></p-dropdown>
+    </div>
+    <div class="d-grid gap-2">
+      <button (click)="actionsModal(actionButton)" type="button"  class="btn {{classButton}} mr-2"><i class="pi {{iconButton}}"></i> {{actionButton}}</button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog id="modal-1" [(visible)]="load" [modal]="true">
+  <p-progressSpinner></p-progressSpinner>
+</p-dialog>
+
+<p-toast position="center" [preventOpenDuplicates]="true" [breakpoints]="{'920px': {width: '100%', right: '0', left: '0'}}"></p-toast>

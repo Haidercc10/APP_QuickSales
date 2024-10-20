@@ -1,0 +1,62 @@
+*{
+  text-decoration: none;
+  list-style: none;
+}
+
+.texto-centrado {
+  text-align: center;
+  margin-top: 20%;
+}
+
+.container-fluid {
+  display: flex;
+  background: url('/assets/img-1.jpg') no-repeat center;
+  height: 100vh;
+  min-height: 500px;
+  background-size: cover;
+  background-attachment: fixed;
+  font-family: 'Ubuntu', sans-serif;
+  padding-top: 15%;
+  padding-bottom: 25%;
+}
+
+.texto-blanco {
+  color: white;
+}
+
+.texto-rojo {
+  color: white;
+  text-align: center;
+}
+
+/* SOBRE NOSOTROS */
+.rojo {
+  background-color: #d83542;
+}
+
+.container {
+  width: 75%;
+  padding-top: 5%;
+  padding-bottom: 5%;
+}
+
+.texto-15 {
+  font-size: large;
+  color: #FFF;
+}
+
+.pi-facebook, .pi-instagram, .pi-whatsapp {
+  font-size: 30px;
+  color: #fff;
+  margin-left: 0.50rem;
+  margin-right: 0.50rem;
+}
+
+.pi-instagram:hover, .pi-facebook:hover, .pi-whatsapp:hover {
+  color: #901b25;
+  cursor: pointer;
+}
+
+.form-floating {
+  font-size: 14px;
+}

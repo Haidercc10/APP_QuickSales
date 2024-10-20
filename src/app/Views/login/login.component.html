@@ -2,10 +2,14 @@
   <div class="bg-red">
     <div class="content">
       <form [formGroup]="form">
+        <div class="text-center">
+          <img class="logo" src="../assets/logo-qs2.png" alt="Quick Sales">
+        </div>
+        <p-divider></p-divider>
         <div class="mb-3">
           <h4 class="text-center text-danger"> <b> Iniciar Sesión</b></h4>
         </div>
-          <div class="mb-3">
+        <div class="mb-3">
           <label for="id" class="form-label">Id Usuario</label>
           <input formControlName="id" type="number" class="form-control" id="id" aria-describedby="emailHelp">
         </div>
@@ -13,7 +17,7 @@
           <label for="pass" class="form-label">Password</label>
           <input formControlName="pass" type="password" class="form-control" id="pass">
         </div>
-        <div id="note" class="form-text text-center mb-3">Disfruta de todos los beneficios de <b>Quick Sales <i class="pi pi-cart-plus"></i></b></div>
+        <div id="note" class="form-text text-center mb-3">Disfruta de todos los beneficios de <b class="text-danger">Quick Sales <i class="pi pi-cart-plus"></i></b></div>
         <div class="d-grid gap-2">
           <button (click)="sendData()" type="button" class="btn btn-danger mr-2"><i class="pi pi-check-square"></i> <b> Ingresar</b> </button>
         </div>
