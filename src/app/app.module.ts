@@ -8,7 +8,7 @@ import { MessagesModule } from 'primeng/messages';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule, Routes } from '@angular/router'
+import { RouterModule, Routes } from '@angular/router';
 import { PanelMenuModule } from 'primeng/panelmenu'
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
