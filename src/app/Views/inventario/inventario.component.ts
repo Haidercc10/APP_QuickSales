@@ -1,12 +1,23 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Table } from 'primeng/table';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Table, TableModule } from 'primeng/table';
 import { Model_Products } from 'src/app/Models/Products/Model_Products';
 import { SvMsgsService } from 'src/app/Services/Mensajes/sv-msgs.service';
 import { ProductosService } from 'src/app/Services/Productos/productos.service';
+import { HeaderComponent } from '../header/header.component';
+import { DividerModule } from 'primeng/divider';
+import { ChipModule } from 'primeng/chip';
+import { CardModule } from 'primeng/card';
+import { DialogModule } from 'primeng/dialog';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ToastModule } from 'primeng/toast';
+import { DropdownModule } from 'primeng/dropdown';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-inventario',
+  standalone : true,
+  imports: [HeaderComponent, DividerModule, ChipModule, ProgressSpinnerModule, TableModule, CardModule, DialogModule, FormsModule, ReactiveFormsModule, ToastModule, DropdownModule, DecimalPipe],
   templateUrl: './inventario.component.html',
   styleUrls: ['./inventario.component.css']
 })

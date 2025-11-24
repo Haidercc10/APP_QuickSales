@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DividerModule } from 'primeng/divider';
+import { ToastModule } from 'primeng/toast';
 import { SvMsgsService } from 'src/app/Services/Mensajes/sv-msgs.service';
 import { SvUsuariosService } from 'src/app/Services/Usuarios/sv-usuarios.service';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
+  imports: [ToastModule, FormsModule, ReactiveFormsModule, DividerModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })

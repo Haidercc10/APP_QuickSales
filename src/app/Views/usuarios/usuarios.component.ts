@@ -1,15 +1,26 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Table } from 'primeng/table';
+import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Header } from 'primeng/api';
+import { CardModule } from 'primeng/card';
+import { ChipModule } from 'primeng/chip';
+import { DialogModule } from 'primeng/dialog';
+import { DividerModule } from 'primeng/divider';
+import { DropdownModule } from 'primeng/dropdown';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { Table, TableModule } from 'primeng/table';
+import { Toast, ToastModule } from 'primeng/toast';
 import { Model_Users } from 'src/app/Models/Model_Users';
 import { SvMsgsService } from 'src/app/Services/Mensajes/sv-msgs.service';
 import { RolesService } from 'src/app/Services/Roles/roles.service';
 import { SvUsuariosService } from 'src/app/Services/Usuarios/sv-usuarios.service';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-usuarios',
+  standalone : true,
+  imports: [FormsModule, TableModule, DialogModule, ToastModule, ProgressSpinnerModule, DropdownModule, CardModule, ChipModule, DividerModule, HeaderComponent, ReactiveFormsModule],
   templateUrl: './usuarios.component.html',
-  styleUrls: ['./usuarios.component.css']
+  styleUrls: ['./usuarios.component.css'], 
 })
 export class UsuariosComponent {
   users : any = [];

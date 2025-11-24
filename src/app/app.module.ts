@@ -8,7 +8,7 @@ import { MessagesModule } from 'primeng/messages';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule, Routes } from '@angular/router';
+import { provideRouter, RouterModule } from '@angular/router';
 import { PanelMenuModule } from 'primeng/panelmenu'
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
@@ -21,28 +21,11 @@ import { ChipModule } from 'primeng/chip';
 import { InputTextModule } from 'primeng/inputtext';
 //*Componentes
 import { AppComponent } from './app.component';
-import { LoginComponent } from './Views/login/login.component';
-import { HomeComponent } from './Views/home/home.component';
-import { InventarioComponent } from './Views/inventario/inventario.component';
-import { HeaderComponent } from './Views/header/header.component';
-import { UsuariosComponent } from './Views/usuarios/usuarios.component';
-
-const routes : Routes = [
-  { path : '', component : LoginComponent,   },
-  { path : 'inventory', component : AppComponent,  },
-  { path : 'home', component : HomeComponent,  },
-  { path : 'productos', component : InventarioComponent,  },
-  { path : 'usuarios', component : UsuariosComponent,  },
-]
+import { routes } from './app.routes';
 
 @NgModule({
   declarations: [
-    LoginComponent,
     AppComponent,
-    HomeComponent,
-    InventarioComponent,
-    HeaderComponent,
-    UsuariosComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,7 +36,6 @@ const routes : Routes = [
     ButtonModule,
     MessagesModule,
     ToastModule,
-    RouterModule.forRoot(routes),
     PanelMenuModule,
     CardModule,
     DividerModule,
@@ -67,7 +49,8 @@ const routes : Routes = [
   ],
   exports : [RouterModule],
   providers: [
-    MessageService
+    MessageService, 
+    provideRouter(routes)
   ],
   bootstrap: [AppComponent]
 })
