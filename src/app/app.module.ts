@@ -20,12 +20,11 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ChipModule } from 'primeng/chip';
 import { InputTextModule } from 'primeng/inputtext';
 //*Componentes
-import { AppComponent } from './app.component';
 import { routes } from './app.routes';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -52,6 +51,6 @@ import { routes } from './app.routes';
     MessageService, 
     provideRouter(routes)
   ],
-  bootstrap: [AppComponent]
+  bootstrap: []
 })
 export class AppModule { }
