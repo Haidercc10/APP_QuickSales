@@ -13,11 +13,17 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastModule } from 'primeng/toast';
 import { DropdownModule } from 'primeng/dropdown';
 import { DecimalPipe } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { InputTextModule } from 'primeng/inputtext';
+import { Ripple } from "primeng/ripple";
+
 
 @Component({
   selector: 'app-inventario',
   standalone : true,
-  imports: [HeaderComponent, DividerModule, ChipModule, ProgressSpinnerModule, TableModule, CardModule, DialogModule, FormsModule, ReactiveFormsModule, ToastModule, DropdownModule, DecimalPipe],
+  imports: [HeaderComponent, DividerModule, ChipModule, ProgressSpinnerModule, TableModule, CardModule, DialogModule, FormsModule, ReactiveFormsModule, ToastModule, DropdownModule, DecimalPipe, ButtonModule, InputTextModule, Ripple],
   templateUrl: './inventario.component.html',
   styleUrls: ['./inventario.component.css']
 })

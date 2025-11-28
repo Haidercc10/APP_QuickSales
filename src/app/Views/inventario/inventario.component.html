@@ -14,8 +14,12 @@
 <!--* Card-->
 <p-card>
 
+<p-button label="Primary" [raised]="true" />
+
   <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
-    <button (click)="loadModal(true)" type="button" class="btn btn-danger mr-2"><i class="pi pi-plus"></i> <b> Crear</b></button>
+    <p-button label="Secondary" severity="secondary" />
+
+    <button pButton pRipple (click)="loadModal(true)" type="button" class="p-button-danger"><b> Crear</b></button>
   </div>
   <!--* Title Card-->
   <div class="mb-3">
