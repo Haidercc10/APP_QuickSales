@@ -67,9 +67,9 @@
             <td class="text-center">$ {{data.Prod_Precio | number : '1.2-2'}}</td>
             <td class="text-center">$ {{data.Prod_Precio * 0}}</td>
             <td>
-              <button (click)="loadModal(false, data)" type="button" class="btn btn-success mr-2"><i class="pi pi-refresh"></i></button>
+              <p-button (click)="loadModal(false, data)" icon="pi pi-refresh" [rounded]="true" severity="success" pRipple  />
             </td>
-            <td class="text-center">
+            <td>
               <button (click)="deleteProducts(data)" type="button" class="btn btn-danger mr-2"><i class="pi pi-trash"></i></button>
             </td>
         </tr>
