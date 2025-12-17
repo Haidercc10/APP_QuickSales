@@ -17,13 +17,13 @@ import { ButtonModule } from 'primeng/button';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InputTextModule } from 'primeng/inputtext';
-import { Ripple } from "primeng/ripple";
+import { Ripple, RippleModule } from "primeng/ripple";
 
 
 @Component({
   selector: 'app-inventario',
   standalone : true,
-  imports: [HeaderComponent, DividerModule, ChipModule, ProgressSpinnerModule, TableModule, CardModule, DialogModule, FormsModule, ReactiveFormsModule, ToastModule, DropdownModule, DecimalPipe, ButtonModule, InputTextModule, Ripple],
+  imports: [HeaderComponent, DividerModule, ChipModule, ProgressSpinnerModule, TableModule, CardModule, DialogModule, FormsModule, ReactiveFormsModule, ToastModule, DropdownModule, DecimalPipe, ButtonModule, InputTextModule, RippleModule],
   templateUrl: './inventario.component.html',
   styleUrls: ['./inventario.component.css']
 })
