@@ -1,5 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Table, TableModule } from 'primeng/table';
 import { Model_Products } from 'src/app/Models/Products/Model_Products';
 import { SvMsgsService } from 'src/app/Services/Mensajes/sv-msgs.service';
@@ -12,38 +18,60 @@ import { DialogModule } from 'primeng/dialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastModule } from 'primeng/toast';
 import { DropdownModule } from 'primeng/dropdown';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, NgIf } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InputTextModule } from 'primeng/inputtext';
-import { Ripple, RippleModule } from "primeng/ripple";
-
+import { Ripple, RippleModule } from 'primeng/ripple';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @Component({
   selector: 'app-inventario',
-  standalone : true,
-  imports: [HeaderComponent, DividerModule, ChipModule, ProgressSpinnerModule, TableModule, CardModule, DialogModule, FormsModule, ReactiveFormsModule, ToastModule, DropdownModule, DecimalPipe, ButtonModule, InputTextModule, RippleModule],
+  standalone: true,
+  imports: [
+    HeaderComponent,
+    DividerModule,
+    ChipModule,
+    ProgressSpinnerModule,
+    TableModule,
+    CardModule,
+    DialogModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ToastModule,
+    DropdownModule,
+    DecimalPipe,
+    ButtonModule,
+    InputTextModule,
+    RippleModule,
+    ZXingScannerModule,
+    NgIf,
+    QRCodeModule,
+],
   templateUrl: './inventario.component.html',
-  styleUrls: ['./inventario.component.css']
+  styleUrls: ['./inventario.component.css'],
 })
 export class InventarioComponent implements OnInit {
+  products: any = [];
+  modal: boolean = false;
+  form!: FormGroup;
+  units: any = [{ Und_Id: 'UND' }];
+  actionButton: string = `Crear`;
+  classButton: string = `btn-danger`;
+  iconButton: string = `pi-check-square`;
+  load: boolean = false;
+  @ViewChild('dt') dt!: Table;
+  qrResult: string = '';
+  scannerEnabled = true;
+  qrValue = 'OT-12345-ROLLO-8899';
 
-  products : any = [];
-  modal : boolean = false;
-  form !: FormGroup;
-  units : any = [{ Und_Id : 'UND' }];
-  actionButton : string = `Crear`;
-  classButton : string = `btn-danger`;
-  iconButton : string = `pi-check-square`;
-  load : boolean = false;
-  @ViewChild('dt') dt !: Table;
-
-
-  constructor(private svProductos : ProductosService,
-    private svMsjs : SvMsgsService,
-    private frmBuilder : FormBuilder
-  ){
+  constructor(
+    private svProductos: ProductosService,
+    private svMsjs: SvMsgsService,
+    private frmBuilder: FormBuilder,
+  ) {
     this.initForm();
   }
 
@@ -53,112 +81,160 @@ export class InventarioComponent implements OnInit {
   }
 
   //*Inicializar formulario
-  initForm(){
+  initForm() {
     this.form = this.frmBuilder.group({
-      id : [null],
-      name : [null, Validators.required],
-      description : [null, Validators.required],
-      medition : [null, Validators.required],
-      price : [null, Validators.required],
-      unit : [null, Validators.required],
-    })
+      id: [null],
+      name: [null, Validators.required],
+      description: [null, Validators.required],
+      medition: [null, Validators.required],
+      price: [null, Validators.required],
+      unit: [null, Validators.required],
+    });
   }
 
   //* Función para limpiar campos
-  clearFields(){
+  clearFields() {
     this.form.reset();
     this.modal = false;
   }
 
-  applyFilter = ($event : any, campo: any) => this.dt!.filter(($event.target as HTMLInputElement).value, campo, 'contains');
-
+  applyFilter = ($event: any, campo: any) =>
+    this.dt!.filter(
+      ($event.target as HTMLInputElement).value,
+      campo,
+      'contains',
+    );
 
   //*Función que retorna el modelo de productos
-  dataProducts(){
-    let info : Model_Products = {
-      Prod_Id : 0,
+  dataProducts() {
+    let info: Model_Products = {
+      Prod_Id: 0,
       Prod_Nombre: this.form.value.name,
       Prod_Descripcion: this.form.value.description,
       Prod_Medida: this.form.value.medition,
       Prod_Precio: this.form.value.price,
-      Und_Id: this.form.value.unit
-    }
+      Und_Id: this.form.value.unit,
+    };
     return info;
   }
 
   //*Función para realizar la acción de actualizar o crear productos
-  actionsModal(action : string){
+  actionsModal(action: string) {
     action == `Crear` ? this.CreateProducts() : this.updateProducts();
   }
 
   //*Función para cargar el modal y cambiar clases dependiendo la acción
-  loadModal(create : boolean, data? : any){
+  loadModal(create: boolean, data?: any) {
     this.form.reset();
     this.modal = true;
     this.actionButton = create ? `Crear` : `Actualizar`;
-    this.classButton = create ? `btn-danger` : `btn-success`
-    this.iconButton = create ? `pi-check-square` : `pi-refresh`
-    if (!create) setTimeout(() => { this.loadFieldsToUpdate(data); }, 200);
+    this.classButton = create ? `btn-danger` : `btn-success`;
+    this.iconButton = create ? `pi-check-square` : `pi-refresh`;
+    if (!create)
+      setTimeout(() => {
+        this.loadFieldsToUpdate(data);
+      }, 200);
   }
 
   //* Función para cargar los campos del producto a actualizar en el modal
-  loadFieldsToUpdate(data : any){
+  loadFieldsToUpdate(data: any) {
     this.form.patchValue({
-      'id' : data.Prod_Id,
-      'name' : data.Prod_Nombre,
-      'description' : data.Prod_Descripcion,
-      'medition' : data.Prod_Medida,
-      'price' : data.Prod_Precio,
-      'unit' : data.Und_Id,
+      id: data.Prod_Id,
+      name: data.Prod_Nombre,
+      description: data.Prod_Descripcion,
+      medition: data.Prod_Medida,
+      price: data.Prod_Precio,
+      unit: data.Und_Id,
     });
   }
 
   //*Función para obtener todos los productos
-  getProducts(){
+  getProducts() {
     this.products = [];
-    this.svProductos.get_productos().then(data => {
-      this.products = data.data;
-    }, error => {
-      this.svMsjs.msgError(`Error`, `No fue posible cargar la lista de productos | ${error.status} ${error.statusText}`);
-    });
+    this.svProductos.get_productos().then(
+      (data) => {
+        this.products = data.data;
+      },
+      (error) => {
+        this.svMsjs.msgError(
+          `Error`,
+          `No fue posible cargar la lista de productos | ${error.status} ${error.statusText}`,
+        );
+      },
+    );
   }
 
   //*Función para crear productos
-  CreateProducts(){
-    if(this.form.valid) {
-      this.svProductos.post_producto(this.dataProducts()).then(data => {
-        this.svMsjs.msgExit(`Excelente!`, `${data.data.message}!`);
-        this.clearFields();
-        this.getProducts();
-      }, error => {
-        this.svMsjs.msgError(`Error`, `No fue posible crear el producto | ${error.status} ${error.statusText}`);
-      });
+  CreateProducts() {
+    if (this.form.valid) {
+      this.svProductos.post_producto(this.dataProducts()).then(
+        (data) => {
+          this.svMsjs.msgExit(`Excelente!`, `${data.data.message}!`);
+          this.clearFields();
+          this.getProducts();
+        },
+        (error) => {
+          this.svMsjs.msgError(
+            `Error`,
+            `No fue posible crear el producto | ${error.status} ${error.statusText}`,
+          );
+        },
+      );
     } else this.svMsjs.msgAdv(`Error`, `Debe llenar todos los campos!`);
   }
 
   //*Función para actualizar productos
-  updateProducts(){
-    if(this.form.valid) {
-      this.svProductos.put_producto(this.form.value.id, this.dataProducts()).then(data => {
-        this.svMsjs.msgExit(`Excelente!`, `${data.data.message}!`);
-        this.clearFields();
-        this.getProducts();
-      }, error => {
-        this.svMsjs.msgError(`Error`, `No fue posible actualizar el producto | ${error.status} ${error.statusText}`);
-      });
+  updateProducts() {
+    if (this.form.valid) {
+      this.svProductos
+        .put_producto(this.form.value.id, this.dataProducts())
+        .then(
+          (data) => {
+            this.svMsjs.msgExit(`Excelente!`, `${data.data.message}!`);
+            this.clearFields();
+            this.getProducts();
+          },
+          (error) => {
+            this.svMsjs.msgError(
+              `Error`,
+              `No fue posible actualizar el producto | ${error.status} ${error.statusText}`,
+            );
+          },
+        );
     } else this.svMsjs.msgAdv(`Error`, `Debe llenar todos los campos!`);
   }
 
   //*Función para eliminar productos
-  deleteProducts(data : any){
-    this.svProductos.delete_producto(data.Prod_Id).then(data => {
-      this.svMsjs.msgExit(`Excelente!`, `${data.data.message}!`);
-      this.getProducts();
-    }, error => {
-      this.svMsjs.msgError(`Error`, `${data.data.message}!`);
-    })
+  deleteProducts(data: any) {
+    this.svProductos.delete_producto(data.Prod_Id).then(
+      (data) => {
+        this.svMsjs.msgExit(`Excelente!`, `${data.data.message}!`);
+        this.getProducts();
+      },
+      (error) => {
+        this.svMsjs.msgError(`Error`, `${data.data.message}!`);
+      },
+    );
   }
 
+  //* Funcion para lectura de QR
+  onScan(result: string) {
+    if (!this.scannerEnabled) return;
+
+    this.qrResult = result;
+    this.scannerEnabled = false; // evita escanear de nuevo
+
+    console.log('QR detectado:', result);
+
+    // Ejemplo: llamar servicio, buscar producto, etc.
+    // this.buscarProducto(result);
+  }
+
+  //Función para verificar permisos de camara
+  onPermission(hasPermission: boolean) {
+  if (!hasPermission) {
+    alert('Permiso de cámara denegado');
+  }
 }
 
-
+}

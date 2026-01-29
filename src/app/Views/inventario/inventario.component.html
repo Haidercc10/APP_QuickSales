@@ -120,3 +120,19 @@
 </p-dialog>
 
 <p-toast position="center" [preventOpenDuplicates]="true" [breakpoints]="{'920px': {width: '100%', right: '0', left: '0'}}"></p-toast>
+
+<div style="width: 30%;">
+  <zxing-scanner
+  (permissionResponse)="onPermission($event)"
+    *ngIf="scannerEnabled"
+    (scanSuccess)="onScan($event)">
+  </zxing-scanner>
+</div>
+
+
+<p *ngIf="qrResult">
+  Resultado: {{ qrResult }}
+</p>
+
+
+<qrcode [qrdata]="qrResult" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
