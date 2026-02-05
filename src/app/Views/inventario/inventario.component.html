@@ -135,4 +135,4 @@
 </p>
 
 
-<qrcode [qrdata]="qrResult" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+<qrcode *ngIf="qrValue" [qrdata]="qrValue" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>

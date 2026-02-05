@@ -10,7 +10,6 @@ import { Table, TableModule } from 'primeng/table';
 import { Model_Products } from 'src/app/Models/Products/Model_Products';
 import { SvMsgsService } from 'src/app/Services/Mensajes/sv-msgs.service';
 import { ProductosService } from 'src/app/Services/Productos/productos.service';
-import { HeaderComponent } from '../header/header.component';
 import { DividerModule } from 'primeng/divider';
 import { ChipModule } from 'primeng/chip';
 import { CardModule } from 'primeng/card';
@@ -18,7 +17,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastModule } from 'primeng/toast';
 import { DropdownModule } from 'primeng/dropdown';
-import { DecimalPipe, NgIf } from '@angular/common';
+import { CommonModule, DecimalPipe, NgIf } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -26,6 +25,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Ripple, RippleModule } from 'primeng/ripple';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { QRCodeModule } from 'angularx-qrcode';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-inventario',
@@ -53,6 +53,7 @@ import { QRCodeModule } from 'angularx-qrcode';
   templateUrl: './inventario.component.html',
   styleUrls: ['./inventario.component.css'],
 })
+
 export class InventarioComponent implements OnInit {
   products: any = [];
   modal: boolean = false;

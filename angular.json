@@ -78,15 +78,15 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "APP_QuickSales:build",
+            "browserTarget": "APP_QuickSales:build",
             "open": true
           },
           "configurations": {
             "production": {
-              "buildTarget": "APP_QuickSales:build:production"
+              "browserTarget": "APP_QuickSales:build:production"
             },
             "development": {
-              "buildTarget": "APP_QuickSales:build:development"
+              "browserTarget": "APP_QuickSales:build:development"
             }
           },
           "defaultConfiguration": "development"
