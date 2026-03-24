@@ -1,7 +1,7 @@
-<div cass="container-fluid">
+<div class="container-fluid">
   <div class="bg-red">
     <div class="content">
-      <form [formGroup]="form">
+      <form [formGroup]="form" (ngSubmit)="sendData()">
         <div class="text-center">
           <img class="logo" src="../assets/logo-qs2.png" alt="Quick Sales">
         </div>
@@ -11,15 +11,28 @@
         </div>
         <div class="mb-3">
           <label for="id" class="form-label">Id Usuario</label>
-          <input formControlName="id" type="number" class="form-control" id="id" aria-describedby="emailHelp">
+          <input formControlName="id" type="number" class="form-control" id="id" min="1">
+          @if (form.controls.id.invalid && form.controls.id.touched) {
+            <small class="text-danger">
+              Debe ingresar un ID válido.
+            </small>
+          }
         </div>
         <div class="mb-3">
           <label for="pass" class="form-label">Password</label>
           <input formControlName="pass" type="password" class="form-control" id="pass">
+          @if (form.controls.pass.invalid && form.controls.pass.touched) {
+            <small class="text-danger">
+              La contraseña es obligatoria.
+            </small>
+          }
         </div>
         <div id="note" class="form-text text-center mb-3">Disfruta de todos los beneficios de <b class="text-danger">Quick Sales <i class="pi pi-cart-plus"></i></b></div>
         <div class="d-grid gap-2">
-          <button (click)="sendData()" type="button" class="btn btn-danger mr-2"><i class="pi pi-check-square"></i> <b> Ingresar</b> </button>
+          <button type="submit" class="btn btn-danger mr-2" [disabled]="form.invalid || isSubmitting">
+            <i class="pi pi-check-square"></i>
+            <b>{{ isSubmitting ? 'Validando...' : 'Ingresar' }}</b>
+          </button>
         </div>
       </form>
     </div>
