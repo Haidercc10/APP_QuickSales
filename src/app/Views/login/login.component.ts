@@ -6,6 +6,8 @@ import { ToastModule } from 'primeng/toast';
 import { SvMsgsService } from 'src/app/Services/Mensajes/sv-msgs.service';
 import { SvUsuariosService } from 'src/app/Services/Usuarios/sv-usuarios.service';
 import { SvCriptografiaService } from 'src/app/Services/Criptografia/sv-criptografia.service';
+import { SvLoginService } from 'src/app/Services/Login/sv-login.service';
+import { SvCacheService } from 'src/app/Services/Cache/sv-cache.service';
 
 interface UserLoginResponse {
   data: {
@@ -23,6 +25,8 @@ interface UserLoginResponse {
 })
 export class LoginComponent {
   private readonly usersService = inject(SvUsuariosService);
+  private readonly loginService = inject(SvLoginService);
+  private readonly cacheService = inject(SvCacheService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly messagesService = inject(SvMsgsService);
   private readonly router = inject(Router);
@@ -34,6 +38,45 @@ export class LoginComponent {
   });
 
   isSubmitting = false;
+
+  // Método para enviar datos al backend y manejar la respuesta
+  async loginWithEndpoint(): Promise<void> {
+    if (this.form.invalid || this.isSubmitting) {
+      this.form.markAllAsTouched();
+      this.messagesService.msgAdv('Advertencia', 'Debe ingresar un ID válido y contraseña.');
+      return;
+    }
+
+    this.isSubmitting = true;
+    const { id, pass } = this.form.getRawValue();
+
+    try {
+      const response = await this.loginService.login({ Usu_Id: Number(id), Usu_Password: pass });
+      console.log(response);
+
+      const token = response?.data?.token
+        ?? response?.data?.access_token
+        ?? response?.data?.accessToken
+        ?? response?.data?.jwt;
+
+      console.log('Token de login:', token ?? response?.data);
+
+      if (!token) {
+        this.messagesService.msgAdv('Login exitoso', 'La API respondió, pero no se encontró un token con una llave conocida. Revise la consola.');
+        return;
+      }
+
+      this.cacheService.saveToken(token);
+      this.messagesService.msgExit('Datos correctos', 'Login exitoso. Sesión iniciada correctamente.');
+      await this.router.navigate(['/home']);
+    } catch (error: any) {
+      const status = error?.status ?? 'N/A';
+      const detail = error?.response?.data?.detail ?? error?.detail ?? 'Error inesperado';
+      this.messagesService.msgError('Datos incorrectos', `No fue posible su acceso a Quick Sales | ${status} ${detail}`);
+    } finally {
+      this.isSubmitting = false;
+    }
+  }
 
   async sendData(): Promise<void> {
     if (this.form.invalid || this.isSubmitting) {

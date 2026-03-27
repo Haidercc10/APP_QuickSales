@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="bg-red">
     <div class="content">
-      <form [formGroup]="form" (ngSubmit)="sendData()">
+      <form [formGroup]="form" (ngSubmit)="loginWithEndpoint()">
         <div class="text-center">
           <img class="logo" src="../assets/logo-qs2.png" alt="Quick Sales">
         </div>
@@ -31,7 +31,7 @@
         <div class="d-grid gap-2">
           <button type="submit" class="btn btn-danger mr-2" [disabled]="form.invalid || isSubmitting">
             <i class="pi pi-check-square"></i>
-            <b>{{ isSubmitting ? 'Validando...' : 'Ingresar' }}</b>
+            <b> {{ isSubmitting ? ' Validando...' : ' Ingresar' }}</b>
           </button>
         </div>
       </form>
