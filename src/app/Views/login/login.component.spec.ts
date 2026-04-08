@@ -1,10 +1,12 @@
+/// <reference types="jasmine" />
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
 import { LoginComponent } from './login.component';
-import { SvUsuariosService } from 'src/app/Services/Usuarios/sv-usuarios.service';
-import { SvMsgsService } from 'src/app/Services/Mensajes/sv-msgs.service';
-import { SvCriptografiaService } from 'src/app/Services/Criptografia/sv-criptografia.service';
+import { SvUsuariosService } from '../../Services/Usuarios/sv-usuarios.service';
+import { SvMsgsService } from '../../Services/Mensajes/sv-msgs.service';
+import { SvCriptografiaService } from '../../Services/Criptografia/sv-criptografia.service';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
