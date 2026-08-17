@@ -18,6 +18,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastModule } from 'primeng/toast';
 import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule, DecimalPipe, NgIf } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ButtonModule } from 'primeng/button';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -152,35 +153,36 @@ export class InventarioComponent implements OnInit {
   //*Función para obtener todos los productos
   getProducts() {
     this.products = [];
-    this.svProductos.get_productos().then(
-      (data) => {
-        this.products = data.data;
+    this.svProductos.get_productos().subscribe({
+      next: (data) => {
+        this.products = Array.isArray(data) ? data : data?.data ?? [];
       },
-      (error) => {
+      error: (error: HttpErrorResponse) => {
         this.svMsjs.msgError(
           `Error`,
           `No fue posible cargar la lista de productos | ${error.status} ${error.statusText}`,
         );
       },
-    );
+    });
   }
 
   //*Función para crear productos
   CreateProducts() {
     if (this.form.valid) {
-      this.svProductos.post_producto(this.dataProducts()).then(
-        (data) => {
-          this.svMsjs.msgExit(`Excelente!`, `${data.data.message}!`);
+      this.svProductos.post_producto(this.dataProducts()).subscribe({
+        next: (data) => {
+          const message = data?.message ?? data?.data?.message ?? 'Producto creado correctamente';
+          this.svMsjs.msgExit(`Excelente!`, `${message}!`);
           this.clearFields();
           this.getProducts();
         },
-        (error) => {
+        error: (error: HttpErrorResponse) => {
           this.svMsjs.msgError(
             `Error`,
             `No fue posible crear el producto | ${error.status} ${error.statusText}`,
           );
         },
-      );
+      });
     } else this.svMsjs.msgAdv(`Error`, `Debe llenar todos los campos!`);
   }
 
@@ -189,33 +191,35 @@ export class InventarioComponent implements OnInit {
     if (this.form.valid) {
       this.svProductos
         .put_producto(this.form.value.id, this.dataProducts())
-        .then(
-          (data) => {
-            this.svMsjs.msgExit(`Excelente!`, `${data.data.message}!`);
+        .subscribe({
+          next: (data) => {
+            const message = data?.message ?? data?.data?.message ?? 'Producto actualizado correctamente';
+            this.svMsjs.msgExit(`Excelente!`, `${message}!`);
             this.clearFields();
             this.getProducts();
           },
-          (error) => {
+          error: (error: HttpErrorResponse) => {
             this.svMsjs.msgError(
               `Error`,
               `No fue posible actualizar el producto | ${error.status} ${error.statusText}`,
             );
           },
-        );
+        });
     } else this.svMsjs.msgAdv(`Error`, `Debe llenar todos los campos!`);
   }
 
   //*Función para eliminar productos
   deleteProducts(data: any) {
-    this.svProductos.delete_producto(data.Prod_Id).then(
-      (data) => {
-        this.svMsjs.msgExit(`Excelente!`, `${data.data.message}!`);
+    this.svProductos.delete_producto(data.Prod_Id).subscribe({
+      next: (response) => {
+        const message = response?.message ?? response?.data?.message ?? 'Producto eliminado correctamente';
+        this.svMsjs.msgExit(`Excelente!`, `${message}!`);
         this.getProducts();
       },
-      (error) => {
-        this.svMsjs.msgError(`Error`, `${data.data.message}!`);
+      error: (error: HttpErrorResponse) => {
+        this.svMsjs.msgError(`Error`, `No fue posible eliminar el producto | ${error.status} ${error.statusText}`);
       },
-    );
+    });
   }
 
   //* Funcion para lectura de QR

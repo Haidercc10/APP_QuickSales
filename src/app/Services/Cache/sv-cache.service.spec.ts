@@ -30,4 +30,9 @@ describe('SvCacheService', () => {
     service.removeToken();
     expect(service.getToken()).toBeNull();
   });
+
+  it('should read the token from sessionStorage when localStorage is empty', () => {
+    sessionStorage.setItem('qs_access_token', 'session-token-123');
+    expect(service.getToken()).toBe('session-token-123');
+  });
 });

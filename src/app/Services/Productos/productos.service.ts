@@ -1,5 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import axios from 'axios';
+import { Observable } from 'rxjs';
 import { Model_Products } from 'src/app/Models/Products/Model_Products';
 
 @Injectable({
@@ -9,15 +10,15 @@ export class ProductosService {
 
   readonly apiUrl = `http://127.0.0.1:8000/productos`;
 
-  constructor() { }
+  constructor(private readonly http: HttpClient) { }
 
-  get_producto = (id : number) => axios.get(`${this.apiUrl}/${id}`);
+  get_producto = (id : number): Observable<any> => this.http.get<any>(`${this.apiUrl}/${id}`);
 
-  get_productos = () => axios.get(`${this.apiUrl}`);
+  get_productos = (): Observable<any> => this.http.get<any>(`${this.apiUrl}`);
 
-  post_producto = (data : Model_Products) => axios.post(`${this.apiUrl}`, data);
+  post_producto = (data : Model_Products): Observable<any> => this.http.post<any>(`${this.apiUrl}`, data);
 
-  put_producto = (id : number, data : Model_Products) => axios.put(`${this.apiUrl}/${id}`, data);
+  put_producto = (id : number, data : Model_Products): Observable<any> => this.http.put<any>(`${this.apiUrl}/${id}`, data);
 
-  delete_producto = (id : number) => axios.delete(`${this.apiUrl}/${id}`);
+  delete_producto = (id : number): Observable<any> => this.http.delete<any>(`${this.apiUrl}/${id}`);
 }

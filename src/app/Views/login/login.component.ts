@@ -8,12 +8,11 @@ import { SvUsuariosService } from 'src/app/Services/Usuarios/sv-usuarios.service
 import { SvCriptografiaService } from 'src/app/Services/Criptografia/sv-criptografia.service';
 import { SvLoginService } from 'src/app/Services/Login/sv-login.service';
 import { SvCacheService } from 'src/app/Services/Cache/sv-cache.service';
+import { firstValueFrom } from 'rxjs';
 
-interface UserLoginResponse {
-  data: {
-    Usu_Nombre: string;
-    Usu_Password: string;
-  };
+interface UserLoginData {
+  Usu_Nombre: string;
+  Usu_Password: string;
 }
 
 @Component({
@@ -51,15 +50,18 @@ export class LoginComponent {
     const { id, pass } = this.form.getRawValue();
 
     try {
-      const response = await this.loginService.login({ Usu_Id: Number(id), Usu_Password: pass });
+      const response = await firstValueFrom(this.loginService.login({ Usu_Id: Number(id), Usu_Password: pass }));
       console.log(response);
 
-      const token = response?.data?.token
+      const token = response?.token
+        ?? response?.data?.token
         ?? response?.data?.access_token
+        ?? response?.access_token
         ?? response?.data?.accessToken
+        ?? response?.accessToken
         ?? response?.data?.jwt;
 
-      console.log('Token de login:', token ?? response?.data);
+      console.log('Token de login:', token ?? response);
 
       if (!token) {
         this.messagesService.msgAdv('Login exitoso', 'La API respondió, pero no se encontró un token con una llave conocida. Revise la consola.');
@@ -71,7 +73,7 @@ export class LoginComponent {
       await this.router.navigate(['/home']);
     } catch (error: any) {
       const status = error?.status ?? 'N/A';
-      const detail = error?.response?.data?.detail ?? error?.detail ?? 'Error inesperado';
+      const detail = error?.error?.detail ?? error?.response?.data?.detail ?? error?.detail ?? 'Error inesperado';
       this.messagesService.msgError('Datos incorrectos', `No fue posible su acceso a Quick Sales | ${status} ${detail}`);
     } finally {
       this.isSubmitting = false;
@@ -93,20 +95,21 @@ export class LoginComponent {
       const encryptedPass = this.cryptoService.encrypt(pass);
       const passwordHash = this.cryptoService.hashSHA256(pass);
 
-      const response = await this.usersService.get_usuario(Number(id)) as UserLoginResponse;
+      const response = await firstValueFrom(this.usersService.get_usuario(Number(id)));
+      const user: UserLoginData = response?.data ?? response;
 
       // Compare with encrypted password (backend should decrypt and compare)
       // OR compare with hash if backend stores hash instead
-      if (response.data.Usu_Password !== pass && response.data.Usu_Password !== encryptedPass) {
+      if (!user || (user.Usu_Password !== pass && user.Usu_Password !== encryptedPass)) {
         this.messagesService.msgError('Datos incorrectos', 'La contraseña ingresada no es válida.');
         return;
       }
 
-      this.messagesService.msgExit('Datos correctos', `Bienvenido a Quick Sales ${response.data.Usu_Nombre}!`);
+      this.messagesService.msgExit('Datos correctos', `Bienvenido a Quick Sales ${user.Usu_Nombre}!`);
       await this.router.navigate(['/home']);
     } catch (error: any) {
       const status = error?.status ?? 'N/A';
-      const detail = error?.response?.data?.detail ?? error?.detail ?? 'Error inesperado';
+      const detail = error?.error?.detail ?? error?.response?.data?.detail ?? error?.detail ?? 'Error inesperado';
       this.messagesService.msgError('Datos incorrectos', `No fue posible su acceso a Quick Sales | ${status} ${detail}`);
     } finally {
       this.isSubmitting = false;

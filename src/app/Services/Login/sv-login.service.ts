@@ -1,5 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import axios from 'axios';
+import { Observable } from 'rxjs';
 
 export interface LoginRequest {
   Usu_Id : number;
@@ -13,7 +14,7 @@ export class SvLoginService {
 
   readonly apiUrl = `http://127.0.0.1:8000/login`;
 
-  constructor() { }
+  constructor(private readonly http: HttpClient) { }
 
-  login = (data: LoginRequest) => axios.post(`${this.apiUrl}`, data);
+  login = (data: LoginRequest): Observable<any> => this.http.post<any>(`${this.apiUrl}`, data);
 }

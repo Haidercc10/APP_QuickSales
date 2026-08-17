@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-const TOKEN_KEY = 'qs_access_token';
+export const TOKEN_KEY = 'qs_access_token';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class SvCacheService {
 
   /** Devuelve el token guardado, o null si no existe. */
   getToken(): string | null {
-    return localStorage.getItem(TOKEN_KEY);
+    return localStorage.getItem(TOKEN_KEY) ?? sessionStorage.getItem(TOKEN_KEY);
   }
 
   /** Verifica si hay un token activo en caché. */
@@ -27,5 +27,6 @@ export class SvCacheService {
   /** Elimina el token del caché (logout). */
   removeToken(): void {
     localStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(TOKEN_KEY);
   }
 }
